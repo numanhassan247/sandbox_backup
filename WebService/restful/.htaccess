@@ -1,0 +1,6 @@
+# Turn on the rewrite engine
+Options +FollowSymlinks
+RewriteEngine on
+ 
+# Request routing
+RewriteRule ^([a-zA-Z_-]*)\.(html|json|xml)?$   webservice.php?method=$1&type=$2 [nc,qsa]

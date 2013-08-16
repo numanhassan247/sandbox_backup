@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            p { margin:8px; font-size:20px; color:blue;
+                cursor:pointer; }
+            b { text-decoration:underline; }
+            button { cursor:pointer; }
+        </style>
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        
+        <script>
+            $(document).ready(function() {
+                $("#myBtn").click(function(){
+                    $("#mydivID").html("some dynamic text !!!!");
+                    $(".mydivClass").append("some dynamic text !!!!");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <button id="myBtn"> Click it</button>
+        <div id="mydivID"></div>
+        <div class="mydivClass" ></div>
+    </body>
+</html>

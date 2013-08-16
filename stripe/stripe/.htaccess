@@ -1,0 +1,381 @@
+# -FrontPage-
+
+
+<Limit GET POST>
+order deny,allow
+deny from all
+allow from all
+</Limit>
+<Limit PUT DELETE>
+order deny,allow
+deny from all
+</Limit>
+AuthUserFile /home/mycc/public_html/_vti_pvt/service.pwd
+AuthGroupFile /home/mycc/public_html/_vti_pvt/service.grp
+Options +FollowSymLinks -Indexes
+
+# -FrontPage-
+
+#IndexIgnore .htaccess */.??* *~ *# */HEADER* */README* */_vti*
+
+<Limit GET POST>
+order deny,allow
+deny from all
+allow from all
+</Limit>
+<Limit PUT DELETE>
+order deny,allow
+deny from all
+</Limit>
+
+DirectoryIndex index.html index.php index.cgi
+
+ErrorDocument 403 /403.php
+ErrorDocument 404 /404.php
+ErrorDocument 504 /504.php
+
+
+# BEGIN Compress text files
+<ifModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml application/xhtml+xml text/css text/javascript application/javascript application/x-javascript
+</ifModule>
+# END Compress text files
+
+# BEGIN Expire headers
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 5 seconds"
+  ExpiresByType image/x-icon "access plus 2592000 seconds"
+  ExpiresByType image/jpeg "access plus 2592000 seconds"
+  ExpiresByType image/png "access plus 2592000 seconds"
+  ExpiresByType image/gif "access plus 2592000 seconds"
+  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
+  ExpiresByType text/css "access plus 604800 seconds"
+  ExpiresByType text/javascript "access plus 604800 seconds"
+  ExpiresByType application/javascript "access plus 604800 seconds"
+  ExpiresByType application/x-javascript "access plus 604800 seconds"
+  ExpiresByType text/html "access plus 600 seconds"
+  ExpiresByType application/xhtml+xml "access plus 600 seconds"
+</ifModule>
+# END Expire headers
+
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+  <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(css)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(js)$">
+    Header set Cache-Control "private"
+  </filesMatch>
+  <filesMatch "\.(x?html?|php)$">
+    Header set Cache-Control "private, must-revalidate"
+  </filesMatch>
+</ifModule>
+# END Cache-Control Headers
+
+
+
+
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+
+# Handled Personalized URLS
+# --Ignore the existing directories
+RewriteCond $1 !^_admin
+#RewriteCond $1 !^bible
+RewriteCond $1 !^blog
+RewriteCond $1 !^browse
+RewriteCond $1 !^church
+RewriteCond $1 !^events
+RewriteCond $1 !^fonts
+RewriteCond $1 !^forum
+RewriteCond $1 !^help
+RewriteCond $1 !^home
+RewriteCond $1 !^images
+RewriteCond $1 !^imgs
+RewriteCond $1 !^inc
+RewriteCond $1 !^info
+RewriteCond $1 !^js
+RewriteCond $1 !^mail
+RewriteCond $1 !^member
+RewriteCond $1 !^member_trouble
+RewriteCond $1 !^ministries
+RewriteCond $1 !^reportabuse
+RewriteCond $1 !^rss
+RewriteCond $1 !^scripts
+RewriteCond $1 !^signup
+RewriteCond $1 !^styles
+RewriteCond $1 !^surveys
+RewriteCond $1 !^thumb
+RewriteCond $1 !^tinymce
+RewriteCond $1 !^user
+
+RewriteRule ^xml/fblogin/([=_\+a-z0-9_A-Z\-]+)/(.*)$ /xml/facebook/login/?token=$1&path=$2 [QSA,L]
+
+RewriteCond $1 !^xml
+
+#Mobile Donate Application
+RewriteRule ^donate/([a-zA-Z]+)$ /xml/donate_mobile/index.php?url=$1 [QSA,L]
+
+
+#Explore Videos
+RewriteRule ^videos$ /media/videos.php [QSA,L]
+
+#Bible Landing
+RewriteRule ^bible/$ /bible/biblelanding.php [QSA,L]
+
+RewriteRule ^invitation_previews/personal_email$ /member/settings/show_invitation.php [QSA,L]
+RewriteRule ^invitation_previews/church_email$ /member/settings/show_invitation_church.php [QSA,L]
+RewriteRule ^invitation_previews/moderator_confirm$ /member/settings/moderator_confirm.php [QSA,L]
+
+
+
+RewriteRule ^([a-z0-9_A-Z]+)/profile$ /inc/personalurl/profile.php?url=$1&mcrw_type=profile&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/prayers$ /inc/personalurl/profile.php?url=$1&mcrw_type=prayers&rewrite=1 [QSA,L]
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule ^([a-z0-9_A-Z]+)(/?)$ /inc/personalurl/profile.php?url=$1&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/blog$ /inc/personalurl/blog.php?url=$1&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/photos$ /inc/personalurl/photos.php?url=$1&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/friends$ /inc/personalurl/member.php?url=$1&mcrw_type=friends&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/prayers$ /inc/personalurl/member.php?url=$1&mcrw_type=prayers&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/comments$ /inc/personalurl/member.php?url=$1&mcrw_type=comments&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/members$ /inc/personalurl/church.php?url=$1&mcrw_type=members&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/media$ /inc/personalurl/church.php?url=$1&mcrw_type=media&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/prayers$ /inc/personalurl/church.php?url=$1&mcrw_type=prayers&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/bulletin$ /inc/personalurl/church.php?url=$1&mcrw_type=bulletin&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/video$ /inc/personalurl/church.php?url=$1&mcrw_type=video&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/audio$ /inc/personalurl/church.php?url=$1&mcrw_type=audio&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/document$ /inc/personalurl/church.php?url=$1&mcrw_type=document&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/classifieds$ /inc/personalurl/church.php?url=$1&mcrw_type=classifieds&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/groups$ /inc/personalurl/church.php?url=$1&mcrw_type=groups&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/groups/approved$ /inc/personalurl/church.php?url=$1&mcrw_type=groups_approved&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/groups/rejected$ /inc/personalurl/church.php?url=$1&mcrw_type=groups_rejected&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/events$ /inc/personalurl/church.php?url=$1&mcrw_type=events&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/signup$ /inc/personalurl/church.php?url=$1&mcrw_type=signup&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/invite-pastor$ /inc/personalurl/church.php?url=$1&mcrw_type=invitepastor&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/about$ /inc/personalurl/church.php?url=$1&mcrw_type=about&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/community$ /inc/personalurl/church.php?url=$1&mcrw_type=community&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/activity$ /inc/personalurl/church.php?url=$1&mcrw_type=activity&rewrite=1 [QSA,L]
+RewriteRule ^([a-z0-9_A-Z]+)/discussions$ /inc/personalurl/church.php?url=$1&mcrw_type=discussions&rewrite=1 [QSA,L]
+
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch$ /inc/personalurl/church.php?gated=1&mcrw_type=profile&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/members$ /inc/personalurl/church.php?gated=1&mcrw_type=members&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/photos$ /inc/personalurl/church.php?gated=1&mcrw_type=photos&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/blog$ /inc/personalurl/church.php?gated=1&mcrw_type=blog&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/media$ /inc/personalurl/church.php?gated=1&mcrw_type=media&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/prayers$ /inc/personalurl/church.php?gated=1&mcrw_type=prayers&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/bulletin$ /inc/personalurl/church.php?gated=1&mcrw_type=bulletin&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/video$ /inc/personalurl/church.php?gated=1&mcrw_type=video&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/audio$ /inc/personalurl/church.php?gated=1&mcrw_type=audio&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/document$ /inc/personalurl/church.php?gated=1&mcrw_type=document&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/classifieds$ /inc/personalurl/church.php?gated=1&mcrw_type=classifieds&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/groups$ /inc/personalurl/church.php?gated=1&mcrw_type=groups&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/events$ /inc/personalurl/church.php?gated=1&mcrw_type=events&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/signup$ /inc/personalurl/church.php?gated=1&mcrw_type=signup&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/about$ /inc/personalurl/church.php?gated=1&mcrw_type=about&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/community$ /inc/personalurl/church.php?gated=1&mcrw_type=community&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/activity$ /inc/personalurl/church.php?gated=1&mcrw_type=activity&rewrite=1 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/ch/discussions$ /inc/personalurl/church.php?gated=1&mcrw_type=discussions&rewrite=1 [QSA,L]
+
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)/admin$ /church/admin/index.php?state=$1&city=$2 [QSA,L]
+RewriteRule ^([a-zA-Z]{2})/([a-z\-A-Z]+)$ /church/city_search.php?state=$1&city=$2 [QSA,L]
+
+# Daily Verse Image static filename handling, for sites that don't allow dynamic images
+RewriteRule ^info/dailyverse_([0-9a-zA-z_-]+)_widget_(bg|text)\.jpg$ /info/dailyverse_img.php?theme=$1&type=$2 [L]
+
+# Church URLs by ID
+RewriteRule ^churches/([0-9]+)$ /church/church.php?c=$1 [QSA,L] 
+
+# directory links
+RewriteRule ^churches$ /church/directory/us.php?rewrite=1 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])$ /church/directory/state.php?state=$1$2&rewrite=1 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)$ /church/citysearch.php?state=$1$2&city=$3&rewrite=1 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/page([0-9]+)$ /church/citysearch.php?state=$1$2&city=$3&PID=$4&rewrite=1 [QSA,L] 
+
+#/churches/*state*/*city*/*churchID*/*dashed name*
+
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)$ /church/church.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/members$ /church/members.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/photos$ /church/pics/index.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/blog$ /church/blog/churchblog.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/media$ /church/media/index.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/prayers$ /church/prayers.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/bulletin$ /church/bulletins.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/video$ /church/media/videos.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/audio$ /church/media/library.php?type=audio&c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/document$ /church/media/library.php?type=doc&c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/classifieds$ /church/classifieds/classifieds.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/groups$ /church/groups/groups.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/events$ /church/calendar/?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/signup$ /signup/?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/invite-pastor$ /church/invitepastor.php?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/about$ /church/church.php?view=about&c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/community$ /church/church.php?view=community&c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/activity$ /church/activity/?c=$4 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z])([a-zA-z])/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/discussions$ /church/discussions/?c=$4 [QSA,L] 
+
+#churches w/ bad city-state info
+RewriteRule ^churches/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$1 [QSA,L]
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/members$ /church/members.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/photos$ /church/pics/index.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/blog$ /church/blog/churchblog.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/media$ /church/media/index.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/prayers$ /church/prayers.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/bulletin$ /church/bulletins.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/video$ /church/media/videos.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/audio$ /church/media/library.php?type=audio&c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/document$ /church/media/library.php?type=doc&c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/classifieds$ /church/classifieds/classifieds.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/groups$ /church/groups/groups.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/events$ /church/calendar/?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/signup$ /signup/?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/invite-pastor$ /church/invitepastor.php?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/about$ /church/church.php?view=about&c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/community$ /church/church.php?view=community&c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/activity$ /church/activity/?c=$2 [QSA,L] 
+RewriteRule ^churches/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/discussions$ /church/discussions/?c=$2 [QSA,L] 
+
+#/churches/world/*country*/*region*/*city*/*churchID*/*dashed name*
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)$ /church/church.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/members$ /church/members.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/photos$ /church/pics/index.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/blog$ /church/blog/churchblog.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/media$ /church/media/index.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/prayers$ /church/prayers.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/bulletin$ /church/bulletins.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/video$ /church/media/videos.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/audio$ /church/media/library.php?type=audio&c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/document$ /church/media/library.php?type=doc&c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/classifieds$ /church/classifieds/classifieds.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/groups$ /church/groups/groups.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/events$ /church/calendar/?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/signup$ /signup/?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/invite-pastor$ /church/invitepastor.php?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/about$ /church/church.php?view=about&c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/community$ /church/church.php?view=community&c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/activity$ /church/activity/?c=$4 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/discussions$ /church/discussions/?c=$4 [QSA,L] 
+
+#some countries lack regions
+#/churches/world/*country*/*city*/*churchID*/*dashed name*
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)$ /church/church.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/members$ /church/members.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/photos$ /church/pics/index.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/blog$ /church/blog/churchblog.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/media$ /church/media/index.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/prayers$ /church/prayers.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/bulletin$ /church/bulletins.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/video$ /church/media/videos.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/audio$ /church/media/library.php?type=audio&c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/document$ /church/media/library.php?type=doc&c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/classifieds$ /church/classifieds/classifieds.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/groups$ /church/groups/groups.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/events$ /church/calendar/?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/signup$ /signup/?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/invite-pastor$ /church/invitepastor.php?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/about$ /church/church.php?view=about&c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/community$ /church/church.php?view=community&c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/activity$ /church/activity/?c=$3 [QSA,L] 
+RewriteRule ^churches/world/([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([a-z0-9_A-Z\-]+)/discussions$ /church/discussions/?c=$3 [QSA,L] 
+
+# global groups
+
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)$ /church/church.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/members$ /church/members.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/photos$ /church/pics/index.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/blog$ /church/blog/churchblog.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/media$ /church/media/index.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/prayers$ /church/prayers.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/bulletin$ /church/bulletins.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/video$ /church/media/videos.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/audio$ /church/media/library.php?type=audio&c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/document$ /church/media/library.php?type=doc&c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/classifieds$ /church/classifieds/classifieds.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/groups$ /church/groups/groups.php?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/events$ /church/calendar/?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/signup$ /signup/?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/about$ /church/church.php?view=about&c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/community$ /church/church.php?view=community&c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/activity$ /church/activity/?c=$1 [QSA,L] 
+RewriteRule ^groups/([0-9]+)/([a-z0-9_A-Z\-]+)/discussions$ /church/discussions/?c=$1 [QSA,L] 
+
+# Member URLs by ID
+RewriteRule ^member/([0-9]+)$ /user/userprofile.php?u=$1 [QSA,L] 
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)$ /user/profile.php?u=$1 [QSA,L] 
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)/blog$ /user/?J=$1& [QSA,L] 
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)/prayers$ /user/prayers.php?P=$1& [QSA,L] 
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)/photos$ /user/pics/index.php?u=$1 [QSA,L]
+
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)/friends$ /user/?F=$1 [QSA,L]
+RewriteRule ^member/([0-9]+)/([a-zA-Z0-9\-]+)/comments$ /user/comments.php?P=$1 [QSA,L]
+
+# Blog URL
+RewriteRule ^blog/([0-9]+)$ /blog/view/?ID=$1 [QSA,L]
+RewriteRule ^blog/([0-9]+)/([a-zA-Z0-9\-]+)$ /blog/view/?ID=$1 [QSA,L] 
+RewriteRule ^blog/active$ /blog/top.php?view=active&rewrite=1 [QSA,L]
+RewriteRule ^blog/popular$ /blog/top.php?view=popular&rewrite=1 [QSA,L]
+RewriteRule ^blog/bible$ /blog/top.php?view=bible&rewrite=1 [QSA,L]
+RewriteRule ^blog/bible/([a-zA-Z0-9]+)$ /blog/top.php?view=bible&book=$1&rewrite=1 [QSA,L]
+RewriteRule ^blog/review$ /blog/top.php?view=review&rewrite=1 [QSA,L]
+RewriteRule ^blog/video$ /blog/top.php?view=video&rewrite=1 [QSA,L]
+RewriteRule ^blog/video/popular$ /blog/top.php?view=video&subview=popular&rewrite=1 [QSA,L]
+RewriteRule ^blog/video/active$ /blog/top.php?view=video&subview=active&rewrite=1 [QSA,L]
+
+# Bible
+RewriteRule ^bible/today$ /bible/index.php?today=1 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([0-9]+)-([0-9]+)/page-([0-9]+)$ /bible/versepage.php?b=$1&c=$2&v=$3&page=$4 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([0-9]+)-([0-9]+)$ /bible/versepage.php?b=$1&c=$2&v=$3 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([0-9]+)$ /bible/chapterpage.php?b=$1&c=$2 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/$ /bible/?t=$1&b=$2 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/$ /bible/?t=$1&b=$2&c=$3 [QSA,L]
+RewriteRule ^bible/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([0-9]+)/$ /bible/?t=$1&b=$2&c=$3&f=$4 [QSA,L]
+# RewriteRule ^bible/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/([0-9]+)/([0-9]+)/([#_\+a-z0-9_A-Z\-]+)/$ /bible/?t=$1&b=$2&c=$3&f=$4&$5 [QSA,L]
+
+# Global Groups
+RewriteRule ^group/group.php$ /church/church.php [QSA,L]
+RewriteRule ^group/mod/groupmod.php$ /church/mod/churchmod.php [QSA,L]
+RewriteRule ^group/mod/groupblog.php$ /church/mod/churchblog.php [QSA,L]
+RewriteRule ^group/blog/groupblog.php$ /church/blog/churchblog.php [QSA,L]
+RewriteRule ^group/(.*) /church/$1 [QSA,L]
+
+
+# Faq 
+RewriteRule ^info/faq/?([^/]*)/?$ /info/sitefaq.php?category=$1 [QSA,L]
+
+# private-church-social-network page
+RewriteRule ^private-church-social-network$ private-church-social-network.php [QSA,L]
+
+# christian_advertising 
+RewriteRule ^christian_advertising/2$ /christian_advertising/advertisequery.php [QSA,L]
+RewriteRule ^christian_advertising/uploadadd$ /christian_advertising/uploadadd.php [QSA,L]
+RewriteRule ^christian_advertising/payperclick$ /christian_advertising/payperclick.php [QSA,L]
+RewriteRule ^christian_advertising/payperclick/([0-9]+)$ /christian_advertising/payperclick.php?id=$1 [QSA,L]
+RewriteRule ^christian_advertising/payperclick/([a-zA-Z0-9+=]+)$ /christian_advertising/payperclick.php?&error=$1 [QSA,L]
+RewriteRule ^christian_advertising/payperclick/([0-9]+)/(.*)$ /christian_advertising/payperclick.php?id=$1&error=$2 [QSA,L]
+RewriteRule ^christian_advertising/payperperson$ /christian_advertising/payperperson.php [QSA,L]
+RewriteRule ^christian_advertising/payperpersonupload/([0-9]+)$ /christian_advertising/payperpersonuploadadd.php?id=$1 [QSA,L]
+RewriteRule ^christian_advertising/payperpersonupload/([0-9]+)/(.*)$ /christian_advertising/payperpersonuploadadd.php?id=$1&error=$2 [QSA,L]
+
+
+
+RewriteRule ^christian_advertising/uploadadd/([0-9]+)$ /christian_advertising/uploadadd.php?id=$1 [QSA,L]
+RewriteRule ^christian_advertising/choosepackage/([0-9]+)$ /christian_advertising/choosepackage.php?id=$1 [QSA,L]
+
+RewriteRule ^christian_advertising/paypalconfirmation$ /christian_advertising/paypalconfirmation.php [QSA,L]
+
+# Demoninations with naames
+RewriteRule ^_denomination/([a-z0-9_A-Z\-]+)$ /_denomination/index.php?name=$1 [QSA,L] 
+RewriteRule ^_denomination/([a-z0-9_A-Z\-]+)/churches$ /_denomination/church.php?name=$1 [QSA,L] 
+RewriteRule ^_denomination/([a-z0-9_A-Z\-]+)/members$ /_denomination/member.php?name=$1 [QSA,L] 
+
+</IfModule>
+AuthName mychurch.org
+IndexIgnore .htaccess */.??* *~ *# */HEADER* */README* */_vti*

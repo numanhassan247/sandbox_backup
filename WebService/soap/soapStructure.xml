@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<soap:Envelope
+xmlns:soap="http://www.w3.org/2001/12/soap-envelope"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+
+<soap:Header>
+...
+</soap:Header>
+
+<soap:Body>
+...
+  <soap:Fault>
+  ...
+  </soap:Fault>
+</soap:Body>
+
+</soap:Envelope> 
+
+
+<?xml version="1.0"?>
+<soap:Envelope
+    xmlns:soap="http://www.w3.org/2001/12/soap-envelope"
+    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://www.yourwebroot.com/stock">
+
+        <m:GetStockPrice>
+            <m:StockName>IBM</m:StockName>
+
+        </m:GetStockPrice>
+
+    </soap:Body>
+</soap:Envelope>
